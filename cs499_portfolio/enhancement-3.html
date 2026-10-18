@@ -1,0 +1,383 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
+  <meta name="description"
+        content="CS 499 Database Enhancement - AI Coloring Book Generator">
+
+  <title>Enhancement 3 | Databases</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    CS<span>499</span> / PORTFOLIO
+  </a>
+
+  <button class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="nav">
+    Menu ☰
+  </button>
+
+  <nav id="nav" aria-label="Main navigation">
+    <a href="index.html">Home</a>
+    <a href="index.html#assessment">Self-Assessment</a>
+    <a href="index.html#review">Code Review</a>
+    <a href="index.html#enhancements">Enhancements</a>
+    <a href="index.html#artifacts">Artifacts</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="section">
+
+    <div class="eyebrow">
+      CS 499 / ENHANCEMENT THREE
+    </div>
+
+    <h1>Database <em>Enhancement.</em></h1>
+
+    <p class="lead">
+      Improving data integrity, query organization,
+      and security within the AI Coloring Book
+      Generator.
+    </p>
+
+    <div class="panel">
+      <h2>Artifact Overview</h2>
+
+      <p>
+        The AI Coloring Book Generator is an
+        application that allows users to generate
+        and save coloring book content.
+      </p>
+
+      <p>
+        The application maintains user accounts,
+        coloring books, individual generated pages,
+        and credit balances through a relational
+        database implemented with SQLAlchemy.
+      </p>
+
+      <p>
+        I selected this artifact because database
+        reliability is essential when an application
+        stores user-generated content and manages
+        credits associated with user accounts.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Original Database Limitations</h2>
+
+      <p>
+        The original application already used
+        SQLAlchemy database models. However,
+        several important rules were not enforced
+        directly at the database level.
+      </p>
+
+      <ul>
+        <li>
+          Negative credit balances were not
+          prevented by database constraints.
+        </li>
+
+        <li>
+          Remaining credits could exceed
+          the amount originally granted.
+        </li>
+
+        <li>
+          Invalid page counts could be stored.
+        </li>
+
+        <li>
+          Duplicate page numbers within the
+          same coloring book were not prevented.
+        </li>
+
+        <li>
+          Some frequently used queries lacked
+          matching composite indexes.
+        </li>
+
+        <li>
+          Book and image detail lookups checked
+          ownership after retrieving records.
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h2>Enhancement 1: Data Integrity</h2>
+
+      <p>
+        I implemented database-level constraints
+        to prevent invalid records from being
+        stored in the application.
+      </p>
+
+      <p>
+        SQL CHECK constraints reject negative
+        credits, remaining credits greater than
+        the amount granted, invalid book page
+        counts, and invalid individual page numbers.
+      </p>
+
+      <p>
+        A UNIQUE constraint also prevents two
+        pages belonging to the same coloring
+        book from sharing a page number.
+      </p>
+
+      <h3>Why This Matters</h3>
+
+      <p>
+        Database constraints protect data
+        integrity even when application-level
+        validation is incomplete or bypassed.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Enhancement 2: Database Indexing</h2>
+
+      <p>
+        I added composite indexes to support
+        common database queries.
+      </p>
+
+      <p>
+        These indexes cover user books and
+        images ordered by creation date,
+        pages belonging to a book, and
+        credit records organized by user
+        and expiration date.
+      </p>
+
+      <h3>Why This Matters</h3>
+
+      <p>
+        Indexing can improve query performance
+        by reducing unnecessary record scanning.
+        Actual performance improvements would
+        need to be measured using representative
+        production-sized data.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Enhancement 3: Secure Data Access</h2>
+
+      <p>
+        I improved book and image detail queries
+        by including the authenticated user's
+        ID directly in the database lookup.
+      </p>
+
+      <p>
+        This means that the query retrieves
+        only records belonging to the
+        authenticated user.
+      </p>
+
+      <p>
+        Requests for records belonging to
+        another user continue to receive
+        a not-found response.
+      </p>
+
+      <h3>Why This Matters</h3>
+
+      <p>
+        User-scoped queries provide an additional
+        layer of protection against unauthorized
+        access to another user's saved content.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Automated Testing</h2>
+
+      <p>
+        I created six automated SQLite tests
+        to verify the database enhancements.
+      </p>
+
+      <ul>
+        <li>Reject negative credit balances.</li>
+        <li>Reject excessive remaining credits.</li>
+        <li>Reject invalid book page counts.</li>
+        <li>Reject duplicate page numbers.</li>
+        <li>Verify user-scoped image access.</li>
+        <li>Verify index creation and initialization.</li>
+      </ul>
+
+      <p>
+        All six tests passed in the local
+        environment during the milestone.
+      </p>
+
+      <h3>Testing Command</h3>
+
+      <pre><code>python -m unittest discover -s tests -p "test_database_enhancement.py" -v</code></pre>
+    </div>
+
+    <div class="panel">
+      <h2>Database Deployment Considerations</h2>
+
+      <p>
+        The new database constraints are applied
+        when creating a fresh database.
+      </p>
+
+      <p>
+        Existing databases require a reviewed
+        migration to check historical data
+        and apply the necessary schema changes.
+      </p>
+
+      <p>
+        This distinction is important because
+        successful testing with a new database
+        does not demonstrate that an existing
+        database has been migrated.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Reflection and Skills Demonstrated</h2>
+
+      <p>
+        This enhancement strengthened my ability
+        to evaluate an existing database,
+        identify potential integrity problems,
+        and implement practical improvements.
+      </p>
+
+      <p>
+        I gained experience working with
+        SQLAlchemy constraints, composite
+        indexes, user-scoped queries, and
+        automated database testing.
+      </p>
+
+      <p>
+        One important lesson was understanding
+        that database security and integrity
+        should not depend entirely on
+        application-level logic.
+      </p>
+
+      <p>
+        I also learned that database schema
+        changes require careful consideration
+        of existing data and deployment
+        procedures.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Course Outcomes</h2>
+
+      <p>
+        This enhancement demonstrates my ability
+        to design and evaluate computing solutions,
+        apply appropriate technical tools,
+        communicate development decisions,
+        and consider security during
+        application development.
+      </p>
+
+      <p>
+        The database improvements support
+        more reliable application behavior
+        while strengthening the protection
+        of user-generated content.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Source Code and Evidence</h2>
+
+      <p>
+        The following project files demonstrate
+        the database enhancement.
+      </p>
+
+      <ul>
+        <li>
+          <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/blob/main/AI-Coloring-Book-Generator-main/backend/app/models.py"
+             target="_blank" rel="noopener noreferrer">
+            Database Models
+          </a>
+        </li>
+
+        <li>
+          <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/blob/main/AI-Coloring-Book-Generator-main/backend/app/database_enhancement.py"
+             target="_blank" rel="noopener noreferrer">
+            Database Enhancement Module
+          </a>
+        </li>
+
+        <li>
+          <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/blob/main/AI-Coloring-Book-Generator-main/tests/test_database_enhancement.py"
+             target="_blank" rel="noopener noreferrer">
+            Database Enhancement Tests
+          </a>
+        </li>
+
+        <li>
+          <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/blob/main/AI-Coloring-Book-Generator-main/MILESTONE_FOUR_DATABASE_NARRATIVE.md"
+             target="_blank" rel="noopener noreferrer">
+            Milestone Four Database Narrative
+          </a>
+        </li>
+      </ul>
+
+      <a class="button primary"
+         href="https://github.com/SieBeFi/AI-COLORING-BOOK-2"
+         target="_blank"
+         rel="noopener noreferrer">
+        View Complete GitHub Repository ↗
+      </a>
+    </div>
+
+    <div class="actions">
+      <a class="button secondary"
+         href="enhancement-2.html">
+        ← Enhancement 2
+      </a>
+
+      <a class="button primary"
+         href="index.html#enhancements">
+        Back to Portfolio →
+      </a>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <span>CS 499 · Computer Science Capstone</span>
+  <span>Southern New Hampshire University</span>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,396 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="CS 499 Enhancement Two: Algorithms and Data Structures">
+  <title>Enhancement 2 | Algorithms and Data Structures</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    CS<span>499</span> / PORTFOLIO
+  </a>
+  <button class="menu-toggle" type="button"
+          aria-expanded="false" aria-controls="nav">
+    Menu ☰
+  </button>
+  <nav id="nav" aria-label="Main navigation">
+    <a href="index.html">Home</a>
+    <a href="index.html#assessment">Self-Assessment</a>
+    <a href="index.html#review">Code Review</a>
+    <a href="index.html#enhancements">Enhancements</a>
+    <a href="index.html#artifacts">Artifacts</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="section">
+
+    <div class="eyebrow">
+      CS 499 / ENHANCEMENT TWO
+    </div>
+
+    <h1>Algorithms &amp; <em>Data Structures.</em></h1>
+
+    <p class="lead">
+      Enhancing fault tolerance, structured result
+      handling, and reliability in the AI Coloring
+      Book Generator.
+    </p>
+
+    <div class="panel">
+      <h2>Artifact Overview</h2>
+      <p>
+        The AI Coloring Book Generator is a project
+        I began roughly three years ago and have
+        continued to develop as my programming
+        skills have grown.
+      </p>
+      <p>
+        The application generates AI-created
+        coloring pages based on subjects supplied
+        by the user. The larger project includes
+        a Python backend, frontend interface,
+        authentication, credit tracking, a saved
+        image library, and database persistence.
+      </p>
+      <p>
+        For this enhancement, I focused on the
+        generate_book() method, which processes
+        multiple subjects while maintaining
+        their original order.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Original Algorithm</h2>
+      <p>
+        The original generate_book() method
+        processed subjects sequentially and
+        returned one ordered list containing
+        paths to successfully generated pages.
+      </p>
+      <p>
+        Although this approach was simple,
+        it had an important limitation:
+        an exception during generate_page()
+        could interrupt the loop and prevent
+        subsequent subjects from being processed.
+      </p>
+      <p>
+        The original result structure also
+        did not preserve information about
+        failed subjects or their error messages.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Enhanced Algorithm</h2>
+      <p>
+        I redesigned generate_book() to maintain
+        two separate collections:
+        successful_pages and failed_pages.
+      </p>
+      <p>
+        The successful_pages list stores Path
+        objects for completed pages. The
+        failed_pages list stores dictionaries
+        containing the failed subject and
+        corresponding error message.
+      </p>
+      <p>
+        Exception handling now occurs inside
+        the processing loop. If one generation
+        attempt fails, the application records
+        the failure and continues processing
+        the remaining subjects.
+      </p>
+
+      <h3>Enhanced Python Implementation</h3>
+      <pre><code>successful_pages = []
+failed_pages = []
+
+for index, subject in enumerate(subjects, start=1):
+    filename = f"{index:02d}-{slugify(subject)}.png"
+
+    try:
+        path = self.generate_page(
+            subject,
+            style=style,
+            filename=filename,
+            size=size,
+        )
+        successful_pages.append(path)
+
+    except Exception as error:
+        failed_pages.append({
+            "subject": subject,
+            "error": str(error),
+        })
+
+return successful_pages, failed_pages</code></pre>
+
+      <p>
+        This code is taken from the central
+        processing logic of my enhanced
+        generator, with the surrounding
+        method definition omitted.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Data Structures and Design Decisions</h2>
+      <p>
+        I used ordered lists because the
+        application needs to preserve the
+        sequence of successful page results.
+      </p>
+      <p>
+        Dictionaries provide a readable
+        structure for associating each failed
+        subject with its error information.
+      </p>
+      <p>
+        The method returns both collections
+        as a tuple, allowing other components
+        to access successful and failed
+        results separately.
+      </p>
+      <p>
+        The enhanced implementation is more
+        complex than the original single-list
+        approach, but the additional structure
+        provides greater reliability and
+        more informative results.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Command-Line Interface Integration</h2>
+      <p>
+        Changing the return value of
+        generate_book() also required
+        changes to the command-line interface.
+      </p>
+      <p>
+        I updated the CLI to unpack both
+        collections, display successfully
+        generated page paths, and report
+        failed subjects and their errors
+        separately.
+      </p>
+      <pre><code>successful_pages, failed_pages = generator.generate_book(
+    all_subjects,
+    style=style,
+    size=size,
+)</code></pre>
+      <p>
+        This demonstrated the importance of
+        considering dependencies when
+        modifying an existing application.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Automated Testing</h2>
+      <p>
+        I created an automated test using
+        a MockGenerator that simulates
+        successful and failed generation
+        attempts without calling an
+        external image-generation service.
+      </p>
+      <p>
+        The test processes three subjects:
+        cat, fail, and dog. The second
+        subject deliberately raises an
+        exception.
+      </p>
+
+      <h3>Test Input</h3>
+      <pre><code>subjects = ["cat", "fail", "dog"]
+
+successful_pages, failed_pages = (
+    generator.generate_book(subjects)
+)</code></pre>
+
+      <h3>Expected Results</h3>
+      <pre><code>successful_pages = [
+    Path("01-cat.png"),
+    Path("03-dog.png"),
+]
+
+failed_pages = [
+    {
+        "subject": "fail",
+        "error": "Simulated generation failure",
+    }
+]</code></pre>
+
+      <p>
+        The test verifies that the third
+        subject is processed even though
+        the second subject fails. It also
+        checks that the error information
+        is preserved.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>GitHub Actions and Continuous Integration</h2>
+      <p>
+        I configured a GitHub Actions
+        workflow to run the algorithm
+        test automatically.
+      </p>
+      <p>
+        The initial workflow run failed
+        because the test-file path was
+        incorrect. After examining the
+        workflow output and correcting
+        the path, the test passed.
+      </p>
+      <p>
+        This experience helped me
+        understand how automated testing
+        and continuous integration can
+        support reliable software
+        development.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Reflection and Lessons Learned</h2>
+      <p>
+        This enhancement taught me that
+        improving an algorithm does not
+        always mean making it faster.
+      </p>
+      <p>
+        In this case, the most meaningful
+        improvement was fault tolerance.
+        The application can now continue
+        processing after an individual
+        generation failure.
+      </p>
+      <p>
+        I also learned that failure
+        information is valuable data
+        that should be preserved rather
+        than discarded.
+      </p>
+      <p>
+        One challenge was updating the
+        CLI after changing the return
+        structure of generate_book().
+        This reinforced the importance
+        of considering how components
+        depend on one another.
+      </p>
+      <p>
+        Writing a controlled failure
+        test and debugging the GitHub
+        Actions workflow strengthened
+        my testing and troubleshooting
+        skills.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Course Outcomes</h2>
+      <p>
+        This enhancement demonstrates
+        my ability to design and evaluate
+        computing solutions using
+        algorithmic principles and
+        appropriate data structures
+        while considering design trade-offs.
+      </p>
+      <p>
+        It also demonstrates the use
+        of computing techniques and
+        development tools to deliver
+        practical value through
+        automated testing, error
+        handling, and improved
+        application reliability.
+      </p>
+    </div>
+
+    <div class="panel">
+      <h2>Source Code and Supporting Evidence</h2>
+      <p>
+        The following files provide
+        technical evidence for this
+        enhancement.
+      </p>
+
+      <ul>
+        <li>
+          <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/blob/main/AI-Coloring-Book-Generator-main/src/generators/base.py"
+             target="_blank" rel="noopener noreferrer">
+            Enhanced generate_book() Method
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/blob/main/AI-Coloring-Book-Generator-main/src/cli.py"
+             target="_blank" rel="noopener noreferrer">
+            Updated Command-Line Interface
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/blob/main/AI-Coloring-Book-Generator-main/src/tests/test_generate_book.py"
+             target="_blank" rel="noopener noreferrer">
+            Automated Generation Test
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/blob/main/AI-Coloring-Book-Generator-main/.github/workflows/main.yml"
+             target="_blank" rel="noopener noreferrer">
+            GitHub Actions Workflow
+          </a>
+        </li>
+      </ul>
+
+     
+
+      <a class="button primary"
+         href="https://github.com/SieBeFi/AI-COLORING-BOOK-2"
+         target="_blank" rel="noopener noreferrer">
+        View Complete Repository ↗
+      </a>
+    </div>
+
+    <div class="actions">
+      <a class="button secondary"
+         href="enhancement-1.html">
+        ← Enhancement 1
+      </a>
+      <a class="button primary"
+         href="enhancement-3.html">
+        Enhancement 3 →
+      </a>
+      <a class="button secondary"
+         href="index.html#enhancements">
+        Back to Portfolio
+      </a>
+    </div>
+
+  </section>
+</main>
+
+<footer>
+  <span>CS 499 · Computer Science Capstone</span>
+  <span>Southern New Hampshire University</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,483 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="CS 499 Software Design and Engineering Enhancement">
+  <title>Enhancement 1 | Software Engineering</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <a class="brand" href="index.html">
+    CS<span>499</span> / PORTFOLIO
+  </a>
+  <button class="menu-toggle" type="button"
+          aria-expanded="false" aria-controls="nav">
+    Menu ☰
+  </button>
+  <nav id="nav" aria-label="Main navigation">
+    <a href="index.html">Home</a>
+    <a href="index.html#assessment">Self-Assessment</a>
+    <a href="index.html#review">Code Review</a>
+    <a href="index.html#enhancements">Enhancements</a>
+    <a href="index.html#artifacts">Artifacts</a>
+  </nav>
+</header>
+
+<main id="main">
+<section class="section">
+
+  <div class="eyebrow">
+    CS 499 / ENHANCEMENT ONE
+  </div>
+
+  <h1>Software Design &amp; <em>Engineering.</em></h1>
+
+  <p class="lead">
+    Exploring modular application architecture,
+    reusable software components, authentication,
+    payment integration, and responsible
+    configuration management.
+  </p>
+
+  <div class="panel">
+    <h2>Artifact Overview</h2>
+
+    <p>
+      ColoringBooks.AI is a full-stack web
+      application I developed in July 2026
+      as a personal programming project.
+      It generates AI-powered coloring book
+      illustrations from text prompts.
+    </p>
+
+    <p>
+      Users can register for an account,
+      receive free generation credits,
+      create coloring pages, and access
+      their previously generated content
+      through a personal library.
+    </p>
+
+    <p>
+      The application also incorporates
+      credit tracking, account management,
+      and Stripe payment integration for
+      purchasing additional credits.
+    </p>
+
+    <p>
+      I selected this artifact because it
+      demonstrates how different technologies
+      and software components work together
+      within a larger application.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Application Architecture</h2>
+
+    <p>
+      The application uses a React frontend
+      and a Python FastAPI backend.
+      Its components are separated according
+      to their responsibilities.
+    </p>
+
+    <h3>Frontend</h3>
+    <p>
+      React provides the user interface
+      for authentication, dashboard
+      information, page generation,
+      account management, and the
+      saved image library.
+    </p>
+
+    <h3>Backend</h3>
+    <p>
+      FastAPI provides API endpoints
+      for authentication, generation,
+      billing, books, and library access.
+    </p>
+
+    <h3>Shared Generation Module</h3>
+    <p>
+      The application also contains a
+      reusable Python image-generation
+      module in the src directory.
+      This module supports both the
+      standalone command-line interface
+      and the web application's
+      generation functionality.
+    </p>
+
+    <h3>Architectural Flow</h3>
+    <pre><code>React Frontend
+      |
+      v
+FastAPI Backend
+      |
+      +-- Authentication
+      +-- Generation
+      +-- Credit Management
+      +-- Billing / Stripe
+      +-- Library
+      |
+      v
+Shared Generation Services
+      |
+      v
+Database and Stored Images</code></pre>
+  </div>
+
+  <div class="panel">
+    <h2>Original Engineering Strengths</h2>
+
+    <p>
+      Before the capstone enhancements,
+      the application already demonstrated
+      several software engineering concepts.
+    </p>
+
+    <ul>
+      <li>
+        Modular routing separated
+        application responsibilities.
+      </li>
+      <li>
+        JWT authentication supported
+        protected API endpoints.
+      </li>
+      <li>
+        Credit management implemented
+        business rules for image generation.
+      </li>
+      <li>
+        Stripe integration supported
+        payment-related operations.
+      </li>
+      <li>
+        Shared generation code reduced
+        duplication between interfaces.
+      </li>
+      <li>
+        Environment configuration
+        supported external service keys
+        and application settings.
+      </li>
+    </ul>
+
+    <p>
+      These were existing characteristics
+      of the artifact, rather than features
+      newly introduced during this milestone.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Enhancement Focus</h2>
+
+    <p>
+      My Milestone Two work focused on
+      maintaining and refining the
+      existing application, particularly
+      its backend configuration and
+      API-key management.
+    </p>
+
+    <p>
+      The scope of these changes was
+      relatively small. However, working
+      within the existing architecture
+      helped me better understand the
+      benefits of separating software
+      responsibilities.
+    </p>
+
+    <p>
+      Because configuration, routing,
+      credit logic, and payment services
+      were already organized into
+      separate modules, I could examine
+      individual components without
+      restructuring the entire application.
+    </p>
+
+    <p>
+      This experience reinforced the
+      importance of maintainability
+      and designing software that can
+      accommodate future changes.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Software Engineering Design Decisions</h2>
+
+    <h3>Separation of Concerns</h3>
+    <p>
+      Organizing authentication, billing,
+      generation, and credit management
+      into separate modules makes
+      responsibilities easier to identify
+      and maintain.
+    </p>
+
+    <h3>Reusable Components</h3>
+    <p>
+      The shared image-generation
+      functionality demonstrates
+      code reuse across the command-line
+      and web interfaces.
+    </p>
+
+    <h3>Business Logic</h3>
+    <p>
+      The credit system represents
+      application-specific rules.
+      New accounts receive an initial
+      credit allocation, and generating
+      pages consumes available credits.
+    </p>
+
+    <h3>Third-Party Integration</h3>
+    <p>
+      Stripe integration demonstrates
+      how an application can communicate
+      with an external payment service
+      while keeping payment-related
+      logic in dedicated modules.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Security Considerations</h2>
+
+    <p>
+      Security was an important
+      consideration when working with
+      authentication, API credentials,
+      and payment services.
+    </p>
+
+    <p>
+      The project uses JWT-based
+      authentication and environment
+      variables for sensitive
+      configuration values.
+    </p>
+
+    <p>
+      During project packaging,
+      I also needed to ensure that
+      real API keys and local
+      environment files were not
+      included in the shared archive.
+    </p>
+
+    <p>
+      Although I did not complete
+      a comprehensive security
+      enhancement during Milestone Two,
+      this work helped me recognize
+      the need for stronger input
+      validation, endpoint protection,
+      and security testing.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Technical Challenges</h2>
+
+    <p>
+      One of the most challenging
+      aspects of developing this
+      application was learning
+      several technologies
+      simultaneously.
+    </p>
+
+    <p>
+      I worked with FastAPI,
+      React, JWT authentication,
+      Stripe payments, Python,
+      Node.js, and environment
+      configuration.
+    </p>
+
+    <p>
+      I used textbooks, online
+      tutorials, and developer
+      discussions to research
+      unfamiliar concepts and
+      troubleshoot problems.
+    </p>
+
+    <p>
+      Setting up the project
+      required coordinating
+      backend dependencies,
+      frontend dependencies,
+      configuration files,
+      and external API keys.
+    </p>
+
+    <p>
+      I also encountered
+      Git-related issues while
+      working with local project
+      directories, which gave me
+      additional experience
+      interpreting development
+      tool errors.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Reflection and Lessons Learned</h2>
+
+    <p>
+      This milestone helped me
+      recognize that effective
+      software engineering
+      involves more than writing
+      code that produces the
+      expected output.
+    </p>
+
+    <p>
+      Application organization,
+      documentation, maintainability,
+      configuration management,
+      and security all influence
+      the quality of a software
+      solution.
+    </p>
+
+    <p>
+      My biggest lesson was
+      understanding the practical
+      value of separation of
+      concerns. A modular
+      application is easier to
+      revisit, understand,
+      and modify.
+    </p>
+
+    <p>
+      I also recognized that
+      I could have planned
+      more substantial enhancements
+      earlier in the course.
+      This experience helped
+      me identify opportunities
+      for continued improvement,
+      especially in security
+      and documentation.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>CS 499 Course Outcomes</h2>
+
+    <h3>Software Engineering and Design</h3>
+    <p>
+      This artifact demonstrates
+      my understanding of modular
+      architecture, application
+      integration, code reuse,
+      and the development tools
+      needed to create a
+      functional software product.
+    </p>
+
+    <h3>Security Mindset</h3>
+    <p>
+      Working with authentication,
+      environment configuration,
+      and payment services
+      strengthened my awareness
+      of protecting sensitive
+      application information.
+    </p>
+
+    <h3>Professional Communication</h3>
+    <p>
+      Project documentation
+      and enhancement narratives
+      provide opportunities to
+      communicate technical
+      decisions, challenges,
+      and lessons learned.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Source Code and Evidence</h2>
+
+    <p>
+      The project repository contains
+      the application's frontend,
+      backend, and shared generation
+      components.
+    </p>
+
+    <ul>
+      <li>
+        <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/tree/main/AI-Coloring-Book-Generator-main/backend"
+           target="_blank" rel="noopener noreferrer">
+          Backend Architecture
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/tree/main/AI-Coloring-Book-Generator-main/frontend"
+           target="_blank" rel="noopener noreferrer">
+          React Frontend
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/SieBeFi/AI-COLORING-BOOK-2/tree/main/AI-Coloring-Book-Generator-main/src"
+           target="_blank" rel="noopener noreferrer">
+          Shared Generation Module
+        </a>
+      </li>
+    </ul>
+
+   
+
+    <a class="button primary"
+       href="https://github.com/SieBeFi/AI-COLORING-BOOK-2"
+       target="_blank" rel="noopener noreferrer">
+      View Complete Repository ↗
+    </a>
+  </div>
+
+  <div class="actions">
+    <a class="button primary"
+       href="enhancement-2.html">
+      Enhancement 2 →
+    </a>
+    <a class="button secondary"
+       href="index.html#enhancements">
+      Back to Portfolio
+    </a>
+  </div>
+
+</section>
+</main>
+
+<footer>
+  <span>CS 499 · Computer Science Capstone</span>
+  <span>Southern New Hampshire University</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
